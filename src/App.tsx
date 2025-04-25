@@ -1,25 +1,48 @@
+
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ChargingProvider } from "@/contexts/ChargingContext";
+import { Layout } from "@/components/Layout";
+
+// Pages
 import Index from "./pages/Index";
+import Login from "./pages/Login";
+import Chargers from "./pages/Chargers";
+import ChargerDetail from "./pages/ChargerDetail";
+import History from "./pages/History";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
+// Create a query client
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <ChargingProvider>
+          <Toaster />
+          <SonnerToaster />
+          <BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Index />} />
+                <Route path="/chargers" element={<Chargers />} />
+                <Route path="/chargers/:id" element={<ChargerDetail />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/404" element={<NotFound />} />
+                <Route path="*" element={<Navigate to="/404" />} />
+              </Routes>
+            </Layout>
+          </BrowserRouter>
+        </ChargingProvider>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -12,7 +13,7 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: '1rem',
 			screens: {
 				'2xl': '1400px'
 			}
@@ -52,6 +53,22 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				success: {
+					DEFAULT: '#10b981',
+					foreground: '#ffffff'
+				},
+				warning: {
+					DEFAULT: '#f59e0b',
+					foreground: '#ffffff'
+				},
+				danger: {
+					DEFAULT: '#ef4444',
+					foreground: '#ffffff'
+				},
+				info: {
+					DEFAULT: '#0ea5e9',
+					foreground: '#ffffff'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +101,16 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-charging': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-charging': 'pulse-charging 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
 			}
 		}
 	},
