@@ -8,12 +8,24 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { MapPin, Zap, Clock } from 'lucide-react';
 import { chargers } from '@/lib/mockData';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 
 const formatDuration = (milliseconds: number): string => {
   const seconds = Math.floor((milliseconds / 1000) % 60);
   const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 };
+
+const AdBanner = ({ title, description, imageBg }: { title: string; description: string; imageBg: string }) => (
+  <Card className="mb-6 overflow-hidden">
+    <div className={`h-32 ${imageBg} bg-cover bg-center flex items-center justify-center`}>
+      <div className="bg-black/50 w-full h-full flex flex-col items-center justify-center text-white p-4">
+        <h2 className="text-xl font-bold mb-1">{title}</h2>
+        <p className="text-sm text-center">{description}</p>
+      </div>
+    </div>
+  </Card>
+);
 
 const Index = () => {
   const { user } = useAuth();
@@ -34,6 +46,34 @@ const Index = () => {
         <h1 className="text-3xl font-bold">Welcome, {user.name}!</h1>
         <p className="text-muted-foreground">{user.vehicle}</p>
       </section>
+      
+      {/* Advertising Banner */}
+      <AdBanner 
+        title="Save 20% on Charging Costs" 
+        description="Subscribe to our Premium Plan and save on every charge"
+        imageBg="bg-gradient-to-r from-blue-500 to-purple-600" 
+      />
+      
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <div className="cursor-pointer">
+            <AdBanner 
+              title="New Stations Added!" 
+              description="Check out our newest charging locations"
+              imageBg="bg-gradient-to-r from-green-500 to-teal-500" 
+            />
+          </div>
+        </HoverCardTrigger>
+        <HoverCardContent>
+          <div className="space-y-2">
+            <h4 className="font-medium">Expanded Network</h4>
+            <p className="text-sm text-muted-foreground">
+              We've added 15 new charging stations across the city. 
+              Find the one closest to you!
+            </p>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
       
       {isCharging ? (
         <Card className="border-primary shadow-md">
