@@ -1,3 +1,4 @@
+
 export type User = {
   id: number;
   username: string;
@@ -51,11 +52,12 @@ export type AuthContextType = {
 };
 
 export type ChargingContextType = {
-  startCharging: (stationId: number, kwhLimit: number) => void;
-  stopCharging: (stationId: number) => void;
+  startCharging: (stationId: number, connectorId: number, kwhLimit: number) => void;
+  stopCharging: (stationId: number, connectorId: number) => void;
   isCharging: boolean;
   currentSession: {
     stationId: number | null;
+    connectorId: number | null;
     startTime: number | null;
     elapsedTime: number;
     kWh: number;

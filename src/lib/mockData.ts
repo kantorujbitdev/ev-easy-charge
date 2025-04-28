@@ -190,22 +190,18 @@ export const chargingSessions: ChargingSession[] = [
   }
 ];
 
-// Helper function to get sessions for a specific user
 export const getUserSessions = (userId: number): ChargingSession[] => {
   return chargingSessions.filter(session => session.userId === userId);
 };
 
-// Helper function to find a user by username
 export const findUserByUsername = (username: string): User | undefined => {
   return users.find(user => user.username === username);
 };
 
-// Helper function to get a charger by ID
 export const getChargerById = (id: number): ChargerStation | undefined => {
   return chargers.find(charger => charger.id === id);
 };
 
-// Helper function to update charger status
 export const updateChargerStatus = (id: number, status: 'Available' | 'Charging' | 'Out of Service'): void => {
   const charger = chargers.find(c => c.id === id);
   if (charger) {
@@ -216,7 +212,6 @@ export const updateChargerStatus = (id: number, status: 'Available' | 'Charging'
   }
 };
 
-// Helper function to update connector status
 export const updateConnectorStatus = (stationId: number, connectorId: number, status: 'Available' | 'Charging' | 'Out of Service'): void => {
   const station = chargers.find(s => s.id === stationId);
   if (station) {
@@ -226,8 +221,6 @@ export const updateConnectorStatus = (stationId: number, connectorId: number, st
     }
   }
 };
-
-// Add these new functions:
 
 export const registerNewUser = async (username: string, password: string, name: string, vehicle: string) => {
   // Generate a new user ID (would be handled by backend in real app)

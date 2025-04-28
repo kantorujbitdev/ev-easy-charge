@@ -40,15 +40,16 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
   });
 
   const isCurrentConnector = isCharging && 
-    currentSession.stationId === connector.stationId;
+    currentSession.stationId === connector.stationId && 
+    currentSession.connectorId === connector.id;
 
   const handleChargingAction = () => {
     if (isCurrentConnector) {
-      stopCharging(connector.stationId);
+      stopCharging(connector.stationId, connector.id);
     } else if (connector.status === 'Available') {
       const kwhLimit = form.getValues('kwhLimit');
       if (kwhLimit) {
-        startCharging(connector.stationId, kwhLimit);
+        startCharging(connector.stationId, connector.id, kwhLimit);
       } else {
         toast.error('Please enter a valid kWh limit');
       }
