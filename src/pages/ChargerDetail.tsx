@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Zap, Battery, Clock, ArrowLeft, Info } from 'lucide-react';
@@ -134,7 +133,7 @@ const ChargerDetail = () => {
                 <div className="flex items-center">
                   <Clock className="h-4 w-4 mr-1 text-primary" />
                   <span>
-                    ${charger.price} × {currentSession.kWh.toFixed(2)} = ${(charger.price! * currentSession.kWh).toFixed(2)}
+                    Total: {currentSession.kWh.toFixed(2)} kWh
                   </span>
                 </div>
               </div>
@@ -162,12 +161,6 @@ const ChargerDetail = () => {
                 You are currently charging at another station
               </p>
             )}
-          </div>
-          
-          <div className="text-sm text-center pt-2">
-            <p>
-              <span className="text-muted-foreground">Price:</span> ${charger.price}/kWh
-            </p>
           </div>
         </CardContent>
       </Card>

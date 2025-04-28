@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Zap, Battery, Info } from 'lucide-react';
@@ -12,7 +11,6 @@ const Chargers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { isAuthenticated } = useAuth();
 
-  // Filter stations based on search term
   const filteredChargers = chargers.filter(
     charger => 
       charger.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -20,7 +18,6 @@ const Chargers = () => {
       (charger.address && charger.address.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Helper function to render the correct status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'Available':
@@ -85,8 +82,7 @@ const Chargers = () => {
                 </div>
               </CardContent>
               <CardFooter className="bg-muted/50 px-4 py-2.5">
-                <div className="flex justify-between items-center w-full">
-                  <span className="text-sm font-medium">${charger.price}/kWh</span>
+                <div className="flex justify-end items-center w-full">
                   <Button 
                     size="sm"
                     variant="ghost"
