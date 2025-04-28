@@ -36,7 +36,7 @@ export function NavBar() {
               )}
             >
               <item.icon className="w-6 h-6 mb-1" />
-              <span className="hidden md:inline">{item.name}</span>
+              <span className="text-xs">{item.name}</span>
             </Link>
           ))}
         </div>

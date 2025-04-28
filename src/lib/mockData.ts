@@ -32,7 +32,6 @@ export const chargers: ChargerStation[] = [
     location: "Lot 1",
     connectorType: "Type 2",
     power: 22,
-    price: 0.35,
     latitude: 51.5074,
     longitude: -0.1278,
     address: "123 Main St, City Center"
@@ -44,7 +43,6 @@ export const chargers: ChargerStation[] = [
     location: "Lot 2",
     connectorType: "CCS",
     power: 50,
-    price: 0.40,
     latitude: 51.5084,
     longitude: -0.1268,
     address: "456 Oak Ave, Downtown"
@@ -56,7 +54,6 @@ export const chargers: ChargerStation[] = [
     location: "Lot 3",
     connectorType: "CHAdeMO",
     power: 50,
-    price: 0.38,
     latitude: 51.5094,
     longitude: -0.1258,
     address: "789 Pine Rd, Uptown"
@@ -68,7 +65,6 @@ export const chargers: ChargerStation[] = [
     location: "Lot 4",
     connectorType: "Type 2",
     power: 11,
-    price: 0.30,
     latitude: 51.5104,
     longitude: -0.1248,
     address: "321 Elm St, Westside"
@@ -80,7 +76,6 @@ export const chargers: ChargerStation[] = [
     location: "Lot 5",
     connectorType: "CCS",
     power: 150,
-    price: 0.45,
     latitude: 51.5114,
     longitude: -0.1238,
     address: "654 Maple Dr, Eastside"

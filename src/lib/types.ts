@@ -17,7 +17,6 @@ export type ChargerStation = {
   location: string;
   connectorType?: string;
   power?: number; // kW
-  price?: number; // per kWh
   latitude?: number;
   longitude?: number;
   address?: string;
