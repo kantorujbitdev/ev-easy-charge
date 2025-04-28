@@ -25,6 +25,9 @@ export type ChargerStation = {
   longitude?: number;
   address?: string;
   connectors: ChargerConnector[];
+  status?: 'Available' | 'Charging' | 'Out of Service';
+  power?: number;
+  connectorType?: string;
 };
 
 export type ChargingSession = {

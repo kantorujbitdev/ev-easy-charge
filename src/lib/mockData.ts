@@ -209,7 +209,10 @@ export const getChargerById = (id: number): ChargerStation | undefined => {
 export const updateChargerStatus = (id: number, status: 'Available' | 'Charging' | 'Out of Service'): void => {
   const charger = chargers.find(c => c.id === id);
   if (charger) {
-    charger.status = status;
+    // Update all connectors at the station
+    charger.connectors.forEach(connector => {
+      connector.status = status;
+    });
   }
 };
 

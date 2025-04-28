@@ -32,8 +32,10 @@ const Index = () => {
   const { isCharging, currentSession } = useCharging();
   const navigate = useNavigate();
   
-  // Count available chargers
-  const availableChargers = chargers.filter(c => c.status === 'Available').length;
+  // Count available connectors across all stations
+  const availableChargers = chargers.reduce((count, station) => {
+    return count + station.connectors.filter(c => c.status === 'Available').length;
+  }, 0);
   
   if (!user) {
     navigate('/login');
