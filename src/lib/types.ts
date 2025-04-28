@@ -10,6 +10,14 @@ export type User = {
   profileImage?: string;
 };
 
+export type ChargerConnector = {
+  id: number;
+  stationId: number;
+  type: string;
+  power: number;
+  status: 'Available' | 'Charging' | 'Out of Service';
+};
+
 export type ChargerStation = {
   id: number;
   name: string;
@@ -20,6 +28,7 @@ export type ChargerStation = {
   latitude?: number;
   longitude?: number;
   address?: string;
+  connectors?: ChargerConnector[];
 };
 
 export type ChargingSession = {
@@ -37,6 +46,7 @@ export type ChargingSession = {
 export type AuthContextType = {
   user: User | null;
   login: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, password: string, name: string, vehicle: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 };

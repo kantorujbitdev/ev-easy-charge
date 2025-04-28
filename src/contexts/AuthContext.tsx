@@ -1,13 +1,14 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { User, AuthContextType } from '@/lib/types';
-import { findUserByUsername } from '@/lib/mockData';
-import { toast } from '@/components/ui/sonner';
+import { findUserByUsername, registerNewUser } from '@/lib/mockData';
+import { toast } from 'sonner';
 
 // Create the context with default values
 const AuthContext = createContext<AuthContextType>({
   user: null,
   login: async () => false,
+  register: async () => false,
   logout: () => {},
   isAuthenticated: false,
 });
@@ -48,6 +49,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return false;
     }
   };
+  
+  const register = async (username: string, password: string, name: string, vehicle: string): Promise<boolean> => {
+    // Simulate API call with 500ms delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const existingUser = findUserByUsername(username);
+    
+    if (existingUser) {
+      toast.error('Username already exists');
+      return false;
+    }
+    
+    try {
+      const newUser = await registerNewUser(username, password, name, vehicle);
+      setUser(newUser);
+      setIsAuthenticated(true);
+      localStorage.setItem('ev_user', JSON.stringify(newUser));
+      toast.success('Account created successfully');
+      return true;
+    } catch (error) {
+      toast.error('Failed to create account');
+      return false;
+    }
+  };
 
   const logout = () => {
     setUser(null);
@@ -57,7 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

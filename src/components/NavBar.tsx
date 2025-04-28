@@ -21,7 +21,7 @@ export function NavBar() {
   ];
   
   return (
-    <nav className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-600 md:top-0 md:border-b md:border-t-0">
+    <nav className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-600">
       <div className="container mx-auto px-2">
         <div className="grid h-full grid-cols-4 mx-auto">
           {navItems.map((item) => (

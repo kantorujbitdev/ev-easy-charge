@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MapPin, Calendar, Zap, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { MapPin, Calendar, Zap, Clock, ChevronRight } from 'lucide-react';
 import { getUserSessions } from '@/lib/mockData';
 import { ChargingSession } from '@/lib/types';
 
@@ -60,31 +61,36 @@ const History = () => {
       <div className="space-y-4">
         {filteredSessions.length > 0 ? (
           filteredSessions.map(session => (
-            <Card key={session.id} className="overflow-hidden">
-              <CardContent className="p-4 grid gap-2">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-medium">{session.station}</h2>
-                  <p className="text-sm text-muted-foreground flex items-center">
-                    <Calendar className="h-3.5 w-3.5 mr-1" />
-                    {session.date}
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  <div className="flex items-center text-sm">
-                    <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
-                    <span>{session.duration}</span>
+            <Link to={`/history/${session.id}`} key={session.id}>
+              <Card className="overflow-hidden hover:shadow-md transition-shadow">
+                <CardContent className="p-4 grid gap-2">
+                  <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-medium">{session.station}</h2>
+                    <div className="flex items-center space-x-1">
+                      <p className="text-sm text-muted-foreground flex items-center">
+                        <Calendar className="h-3.5 w-3.5 mr-1" />
+                        {session.date}
+                      </p>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
                   </div>
-                  <div className="flex items-center text-sm">
-                    <Zap className="h-4 w-4 mr-1 text-primary" />
-                    <span>{session.kWh} kWh</span>
+                  
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    <div className="flex items-center text-sm">
+                      <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
+                      <span>{session.duration}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <Zap className="h-4 w-4 mr-1 text-primary" />
+                      <span>{session.kWh} kWh</span>
+                    </div>
+                    <div className="flex items-center text-sm justify-end">
+                      <span className="font-medium">${(session.kWh * 0.35).toFixed(2)}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center text-sm justify-end">
-                    <span className="font-medium">${(session.kWh * 0.35).toFixed(2)}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           ))
         ) : (
           <div className="text-center py-8">

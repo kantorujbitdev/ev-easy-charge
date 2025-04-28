@@ -11,9 +11,11 @@ import { Layout } from "@/components/Layout";
 // Pages
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Chargers from "./pages/Chargers";
 import ChargerDetail from "./pages/ChargerDetail";
 import History from "./pages/History";
+import HistoryDetail from "./pages/HistoryDetail";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -31,10 +33,12 @@ const App = () => (
             <Layout>
               <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/" element={<Index />} />
                 <Route path="/chargers" element={<Chargers />} />
                 <Route path="/chargers/:id" element={<ChargerDetail />} />
                 <Route path="/history" element={<History />} />
+                <Route path="/history/:id" element={<HistoryDetail />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/404" element={<NotFound />} />
                 <Route path="*" element={<Navigate to="/404" />} />

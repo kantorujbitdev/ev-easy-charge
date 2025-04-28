@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -70,13 +70,21 @@ export default function Login() {
               <p>Username: user2 | Password: user2</p>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col space-y-4">
             <Button 
               type="submit" 
               className="w-full" 
               disabled={isLoading}
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full" 
+              onClick={() => navigate('/register')}
+            >
+              Create Account
             </Button>
           </CardFooter>
         </form>

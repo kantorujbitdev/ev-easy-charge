@@ -10,18 +10,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   
   useEffect(() => {
-    // If user is not authenticated and not on the login page, redirect to login
-    if (!isAuthenticated && location.pathname !== '/login') {
+    // If user is not authenticated and not on login or register pages, redirect to login
+    if (!isAuthenticated && location.pathname !== '/login' && location.pathname !== '/register') {
       navigate('/login');
     }
   }, [isAuthenticated, navigate, location.pathname]);
   
   return (
     <div className="min-h-screen flex flex-col">
-      {isAuthenticated && <NavBar />}
-      <main className={`flex-1 container mx-auto px-4 py-6 ${isAuthenticated ? 'pb-20 md:pt-20 md:pb-6' : ''}`}>
+      <main className={`flex-1 container mx-auto px-4 py-6 ${isAuthenticated ? 'pb-20' : ''}`}>
         {children}
       </main>
+      {isAuthenticated && <NavBar />}
     </div>
   );
 }

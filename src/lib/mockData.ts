@@ -1,4 +1,3 @@
-
 import { User, ChargerStation, ChargingSession } from "./types";
 
 export const users: User[] = [
@@ -161,4 +160,27 @@ export const updateChargerStatus = (id: number, status: 'Available' | 'Charging'
   if (charger) {
     charger.status = status;
   }
+};
+
+// Add these new functions:
+
+export const registerNewUser = async (username: string, password: string, name: string, vehicle: string) => {
+  // Generate a new user ID (would be handled by backend in real app)
+  const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+  
+  const newUser = {
+    id: newId,
+    username,
+    password,
+    name,
+    vehicle
+  };
+  
+  users.push(newUser);
+  
+  return newUser;
+};
+
+export const getSessionById = (sessionId: number) => {
+  return chargingSessions.find(session => session.id === sessionId) || null;
 };
