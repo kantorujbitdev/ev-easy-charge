@@ -39,7 +39,7 @@ const ChargerDetail = () => {
   const form = useForm<z.infer<typeof chargingSchema>>({
     resolver: zodResolver(chargingSchema),
     defaultValues: {
-      kwhLimit: "20", // Changed to string to match the input type
+      kwhLimit: "20", // Using a string value since the input field accepts strings
     },
   });
   
