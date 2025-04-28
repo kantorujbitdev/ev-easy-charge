@@ -16,7 +16,7 @@ export type ChargerStation = {
   status: 'Available' | 'Charging' | 'Out of Service';
   location: string;
   connectorType?: string;
-  power?: number; // kW
+  power?: number;
   latitude?: number;
   longitude?: number;
   address?: string;
@@ -42,7 +42,7 @@ export type AuthContextType = {
 };
 
 export type ChargingContextType = {
-  startCharging: (stationId: number) => void;
+  startCharging: (stationId: number, kwhLimit: number) => void;
   stopCharging: (stationId: number) => void;
   isCharging: boolean;
   currentSession: {
@@ -50,5 +50,6 @@ export type ChargingContextType = {
     startTime: number | null;
     elapsedTime: number;
     kWh: number;
+    kwhLimit: number;
   };
 };

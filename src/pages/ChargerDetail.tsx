@@ -1,13 +1,28 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Zap, Battery, Clock, ArrowLeft, Info } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { getChargerById } from '@/lib/mockData';
 import { ChargerStation } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCharging } from '@/contexts/ChargingContext';
+import { toast } from 'sonner';
+
+const chargingSchema = z.object({
+  kwhLimit: z.string()
+    .transform(Number)
+    .refine(val => val > 0, 'Must be greater than 0')
+    .refine(val => val <= 100, 'Must not exceed 100 kWh'),
+});
 
 const formatDuration = (milliseconds: number): string => {
   const seconds = Math.floor((milliseconds / 1000) % 60);
@@ -21,6 +36,12 @@ const ChargerDetail = () => {
   const { isAuthenticated } = useAuth();
   const { isCharging, startCharging, stopCharging, currentSession } = useCharging();
   const navigate = useNavigate();
+  const form = useForm<z.infer<typeof chargingSchema>>({
+    resolver: zodResolver(chargingSchema),
+    defaultValues: {
+      kwhLimit: '20',
+    },
+  });
   
   const chargerId = parseInt(id || '0', 10);
   const isCurrentCharger = isCharging && currentSession.stationId === chargerId;
@@ -49,7 +70,12 @@ const ChargerDetail = () => {
     if (isCurrentCharger) {
       stopCharging(chargerId);
     } else if (charger.status === 'Available') {
-      startCharging(chargerId);
+      const kwhLimit = parseFloat(form.getValues('kwhLimit'));
+      if (kwhLimit) {
+        startCharging(chargerId, kwhLimit);
+      } else {
+        toast.error('Please enter a valid kWh limit');
+      }
     }
   };
   
@@ -118,16 +144,16 @@ const ChargerDetail = () => {
               <div className="space-y-1.5">
                 <div className="flex justify-between text-sm">
                   <span>Charging Progress</span>
-                  <span>{Math.min(100, (currentSession.kWh / 20) * 100).toFixed(0)}%</span>
+                  <span>{Math.min(100, (currentSession.kWh / currentSession.kwhLimit) * 100).toFixed(0)}%</span>
                 </div>
-                <Progress value={Math.min(100, (currentSession.kWh / 20) * 100)} className="h-2" />
+                <Progress value={Math.min(100, (currentSession.kWh / currentSession.kwhLimit) * 100)} className="h-2" />
               </div>
               
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center">
                   <Info className="h-4 w-4 mr-1 text-muted-foreground" />
                   <span className="text-muted-foreground">
-                    Auto-stop at 20kWh
+                    Auto-stop at {currentSession.kwhLimit}kWh
                   </span>
                 </div>
                 <div className="flex items-center">
@@ -138,6 +164,30 @@ const ChargerDetail = () => {
                 </div>
               </div>
             </div>
+          )}
+          
+          {!isCurrentCharger && charger.status === 'Available' && (
+            <Form {...form}>
+              <form className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="kwhLimit"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>kWh Limit</Label>
+                      <FormControl>
+                        <Input 
+                          type="number" 
+                          placeholder="Enter kWh limit" 
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
           )}
           
           <div className="pt-2">

@@ -5,7 +5,6 @@ import { updateChargerStatus } from '@/lib/mockData';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from '@/components/ui/sonner';
 
-// Default context value
 const ChargingContext = createContext<ChargingContextType>({
   startCharging: () => {},
   stopCharging: () => {},
@@ -15,6 +14,7 @@ const ChargingContext = createContext<ChargingContextType>({
     startTime: null,
     elapsedTime: 0,
     kWh: 0,
+    kwhLimit: 20,
   },
 });
 
@@ -25,11 +25,9 @@ export const ChargingProvider = ({ children }: { children: React.ReactNode }) =>
     startTime: null as number | null,
     elapsedTime: 0,
     kWh: 0,
+    kwhLimit: 20,
   });
   
-  const MAX_KWH = 20; // Auto stop at 20kWh
-  
-  // Tick function to update charging progress
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     
@@ -37,9 +35,7 @@ export const ChargingProvider = ({ children }: { children: React.ReactNode }) =>
       interval = setInterval(() => {
         const now = Date.now();
         const elapsed = now - currentSession.startTime!;
-        const elapsedMinutes = elapsed / 60000; // Convert to minutes
-        
-        // Simulate charging rate of 0.5kWh per minute (30kWh per hour)
+        const elapsedMinutes = elapsed / 60000;
         const newKwh = elapsedMinutes * 0.5;
         
         setCurrentSession(prev => ({
@@ -48,26 +44,26 @@ export const ChargingProvider = ({ children }: { children: React.ReactNode }) =>
           kWh: newKwh,
         }));
         
-        // Auto-stop when reaching the limit
-        if (newKwh >= MAX_KWH) {
+        if (newKwh >= currentSession.kwhLimit) {
           stopCharging(currentSession.stationId!);
           toast.info('Charging complete! Maximum kWh reached.');
         }
-      }, 1000); // Update every second
+      }, 1000);
     }
     
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isCharging, currentSession.startTime]);
+  }, [isCharging, currentSession.startTime, currentSession.kwhLimit]);
   
-  const startCharging = useCallback((stationId: number) => {
+  const startCharging = useCallback((stationId: number, kwhLimit: number) => {
     setIsCharging(true);
     setCurrentSession({
       stationId,
       startTime: Date.now(),
       elapsedTime: 0,
       kWh: 0,
+      kwhLimit,
     });
     updateChargerStatus(stationId, 'Charging');
     toast.success('Charging started successfully');
@@ -78,12 +74,12 @@ export const ChargingProvider = ({ children }: { children: React.ReactNode }) =>
     updateChargerStatus(stationId, 'Available');
     toast.info('Charging stopped');
     
-    // Reset session data
     setCurrentSession({
       stationId: null,
       startTime: null,
       elapsedTime: 0,
       kWh: 0,
+      kwhLimit: 20,
     });
   }, []);
   
