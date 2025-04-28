@@ -21,6 +21,16 @@ export const users: User[] = [
     phone: "555-987-6543",
     profileImage: "/placeholder.svg",
   },
+  {
+    id: 3,
+    username: "admin",
+    password: "admin",
+    name: "ADMIN GORAL",
+    vehicle: "BYD M6",
+    email: "admin@example.com",
+    phone: "555-987-6543",
+    profileImage: "/placeholder.svg",
+  },
 ];
 
 export const chargers: ChargerStation[] = [
