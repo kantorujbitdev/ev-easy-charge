@@ -19,7 +19,7 @@ import { toast } from 'sonner';
 
 const chargingSchema = z.object({
   kwhLimit: z.string()
-    .transform(Number)
+    .transform(val => Number(val))
     .refine(val => val > 0, 'Must be greater than 0')
     .refine(val => val <= 100, 'Must not exceed 100 kWh'),
 });
@@ -39,7 +39,7 @@ const ChargerDetail = () => {
   const form = useForm<z.infer<typeof chargingSchema>>({
     resolver: zodResolver(chargingSchema),
     defaultValues: {
-      kwhLimit: '20',
+      kwhLimit: "20", // Changed to string to match the input type
     },
   });
   
@@ -70,7 +70,7 @@ const ChargerDetail = () => {
     if (isCurrentCharger) {
       stopCharging(chargerId);
     } else if (charger.status === 'Available') {
-      const kwhLimit = parseFloat(form.getValues('kwhLimit'));
+      const kwhLimit = Number(form.getValues('kwhLimit')); // Convert to number when passing
       if (kwhLimit) {
         startCharging(chargerId, kwhLimit);
       } else {
