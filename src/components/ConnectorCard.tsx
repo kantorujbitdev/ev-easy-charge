@@ -1,23 +1,29 @@
-
-import React from 'react';
-import { Battery, Zap } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ChargerConnector } from '@/lib/types';
-import { useCharging } from '@/contexts/ChargingContext';
-import { toast } from 'sonner';
+import React from "react";
+import { Battery, Zap } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ChargerConnector } from "@/lib/types";
+import { useCharging } from "@/contexts/ChargingContext";
+import { toast } from "sonner";
 
 const chargingSchema = z.object({
-  kwhLimit: z.coerce.number()
-    .min(0, 'Must be greater than 0')
-    .max(100, 'Must not exceed 100 kWh'),
+  kwhLimit: z.coerce
+    .number()
+    .min(0, "Must be greater than 0")
+    .max(100, "Must not exceed 100 kWh"),
 });
 
 type ConnectorCardProps = {
@@ -27,11 +33,12 @@ type ConnectorCardProps = {
 const formatDuration = (milliseconds: number): string => {
   const seconds = Math.floor((milliseconds / 1000) % 60);
   const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
 export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
-  const { isCharging, startCharging, stopCharging, currentSession } = useCharging();
+  const { isCharging, startCharging, stopCharging, currentSession } =
+    useCharging();
   const form = useForm<z.infer<typeof chargingSchema>>({
     resolver: zodResolver(chargingSchema),
     defaultValues: {
@@ -39,31 +46,36 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
     },
   });
 
-  const isCurrentConnector = isCharging && 
-    currentSession.stationId === connector.stationId && 
+  const isCurrentConnector =
+    isCharging &&
+    currentSession.stationId === connector.stationId &&
     currentSession.connectorId === connector.id;
 
   const handleChargingAction = () => {
     if (isCurrentConnector) {
       stopCharging(connector.stationId, connector.id);
-    } else if (connector.status === 'Available') {
-      const kwhLimit = form.getValues('kwhLimit');
+    } else if (connector.status === "Available") {
+      const kwhLimit = form.getValues("kwhLimit");
       if (kwhLimit) {
         startCharging(connector.stationId, connector.id, kwhLimit);
       } else {
-        toast.error('Please enter a valid kWh limit');
+        toast.error("Please enter a valid kWh limit");
       }
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'Available':
+      case "Available":
         return <span className="status-badge status-available">Available</span>;
-      case 'Charging':
+      case "Charging":
         return <span className="status-badge status-charging">Charging</span>;
-      case 'Out of Service':
-        return <span className="status-badge status-unavailable">Out of Service</span>;
+      case "Out of Service":
+        return (
+          <span className="status-badge status-unavailable">
+            Out of Service
+          </span>
+        );
       default:
         return null;
     }
@@ -102,23 +114,30 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
                 </span>
               </div>
             </div>
-            
+
             <div className="space-y-1.5">
               <div className="flex justify-between text-sm">
                 <span>Progress</span>
                 <span>
-                  {Math.min(100, (currentSession.kWh / currentSession.kwhLimit) * 100).toFixed(0)}%
+                  {Math.min(
+                    100,
+                    (currentSession.kWh / currentSession.kwhLimit) * 100
+                  ).toFixed(0)}
+                  %
                 </span>
               </div>
-              <Progress 
-                value={Math.min(100, (currentSession.kWh / currentSession.kwhLimit) * 100)} 
-                className="h-2" 
+              <Progress
+                value={Math.min(
+                  100,
+                  (currentSession.kWh / currentSession.kwhLimit) * 100
+                )}
+                className="h-2"
               />
             </div>
           </div>
         )}
 
-        {!isCurrentConnector && connector.status === 'Available' && (
+        {!isCurrentConnector && connector.status === "Available" && (
           <Form {...form}>
             <form className="space-y-4">
               <FormField
@@ -128,9 +147,9 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
                   <FormItem>
                     <Label>kWh Limit</Label>
                     <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="Enter kWh limit" 
+                      <Input
+                        type="number"
+                        placeholder="Enter kWh limit"
                         {...field}
                       />
                     </FormControl>
@@ -143,18 +162,22 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
         )}
 
         <Button
-          className={`w-full ${isCurrentConnector ? 'bg-destructive hover:bg-destructive/90' : ''}`}
-          disabled={connector.status === 'Out of Service' || (isCharging && !isCurrentConnector)}
+          className={`w-full ${
+            isCurrentConnector ? "bg-destructive hover:bg-destructive/90" : ""
+          }`}
+          disabled={
+            connector.status === "Out of Service" ||
+            (isCharging && !isCurrentConnector)
+          }
           onClick={handleChargingAction}
         >
-          {isCurrentConnector 
-            ? 'Stop Charging'
-            : connector.status === 'Available'
-              ? 'Start Charging'
-              : connector.status === 'Charging'
-                ? 'In Use'
-                : 'Out of Service'
-          }
+          {isCurrentConnector
+            ? "Stop Charging"
+            : connector.status === "Available"
+            ? "Start Charging"
+            : connector.status === "Charging"
+            ? "In Use"
+            : "Out of Service"}
         </Button>
       </CardContent>
     </Card>

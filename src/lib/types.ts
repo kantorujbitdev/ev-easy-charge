@@ -1,4 +1,3 @@
-
 export type User = {
   id: number;
   username: string;
@@ -15,7 +14,7 @@ export type ChargerConnector = {
   stationId: number;
   type: string;
   power: number;
-  status: 'Available' | 'Charging' | 'Out of Service';
+  status: "Available" | "Charging" | "Out of Service";
 };
 
 export type ChargerStation = {
@@ -26,7 +25,7 @@ export type ChargerStation = {
   longitude?: number;
   address?: string;
   connectors: ChargerConnector[];
-  status?: 'Available' | 'Charging' | 'Out of Service';
+  status?: "Available" | "Charging" | "Out of Service";
   power?: number;
   connectorType?: string;
 };
@@ -46,13 +45,22 @@ export type ChargingSession = {
 export type AuthContextType = {
   user: User | null;
   login: (username: string, password: string) => Promise<boolean>;
-  register: (username: string, password: string, name: string, vehicle: string) => Promise<boolean>;
+  register: (
+    username: string,
+    password: string,
+    name: string,
+    vehicle: string
+  ) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 };
 
 export type ChargingContextType = {
-  startCharging: (stationId: number, connectorId: number, kwhLimit: number) => void;
+  startCharging: (
+    stationId: number,
+    connectorId: number,
+    kwhLimit: number
+  ) => void;
   stopCharging: (stationId: number, connectorId: number) => void;
   isCharging: boolean;
   currentSession: {
