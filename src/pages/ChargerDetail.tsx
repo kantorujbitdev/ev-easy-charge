@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Zap, Battery, Clock, ArrowLeft, Info } from 'lucide-react';
@@ -18,10 +17,9 @@ import { useCharging } from '@/contexts/ChargingContext';
 import { toast } from 'sonner';
 
 const chargingSchema = z.object({
-  kwhLimit: z.string()
-    .transform(val => Number(val))
-    .refine(val => val > 0, 'Must be greater than 0')
-    .refine(val => val <= 100, 'Must not exceed 100 kWh'),
+  kwhLimit: z.coerce.number()
+    .min(0, 'Must be greater than 0')
+    .max(100, 'Must not exceed 100 kWh'),
 });
 
 const formatDuration = (milliseconds: number): string => {
@@ -39,7 +37,7 @@ const ChargerDetail = () => {
   const form = useForm<z.infer<typeof chargingSchema>>({
     resolver: zodResolver(chargingSchema),
     defaultValues: {
-      kwhLimit: "20", // Using a string value since the input field accepts strings
+      kwhLimit: 20,
     },
   });
   
@@ -70,7 +68,7 @@ const ChargerDetail = () => {
     if (isCurrentCharger) {
       stopCharging(chargerId);
     } else if (charger.status === 'Available') {
-      const kwhLimit = Number(form.getValues('kwhLimit')); // Convert to number when passing
+      const kwhLimit = Number(form.getValues('kwhLimit'));
       if (kwhLimit) {
         startCharging(chargerId, kwhLimit);
       } else {
