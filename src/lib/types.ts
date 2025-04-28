@@ -1,4 +1,3 @@
-
 export type User = {
   id: number;
   username: string;
@@ -21,14 +20,11 @@ export type ChargerConnector = {
 export type ChargerStation = {
   id: number;
   name: string;
-  status: 'Available' | 'Charging' | 'Out of Service';
   location: string;
-  connectorType?: string;
-  power?: number;
   latitude?: number;
   longitude?: number;
   address?: string;
-  connectors?: ChargerConnector[];
+  connectors: ChargerConnector[];
 };
 
 export type ChargingSession = {

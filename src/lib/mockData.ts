@@ -27,57 +27,108 @@ export const chargers: ChargerStation[] = [
   {
     id: 101,
     name: "Station A",
-    status: "Available",
     location: "Lot 1",
-    connectorType: "Type 2",
-    power: 22,
     latitude: 51.5074,
     longitude: -0.1278,
-    address: "123 Main St, City Center"
+    address: "123 Main St, City Center",
+    connectors: [
+      {
+        id: 1011,
+        stationId: 101,
+        type: "Type 2",
+        power: 22,
+        status: "Available"
+      },
+      {
+        id: 1012,
+        stationId: 101,
+        type: "CCS",
+        power: 50,
+        status: "Available"
+      }
+    ]
   },
   {
     id: 102,
     name: "Station B",
-    status: "Charging",
     location: "Lot 2",
-    connectorType: "CCS",
-    power: 50,
     latitude: 51.5084,
     longitude: -0.1268,
-    address: "456 Oak Ave, Downtown"
+    address: "456 Oak Ave, Downtown",
+    connectors: [
+      {
+        id: 1021,
+        stationId: 102,
+        type: "CCS",
+        power: 50,
+        status: "Charging"
+      },
+      {
+        id: 1022,
+        stationId: 102,
+        type: "CHAdeMO",
+        power: 50,
+        status: "Available"
+      }
+    ]
   },
   {
     id: 103,
     name: "Station C",
-    status: "Out of Service",
     location: "Lot 3",
-    connectorType: "CHAdeMO",
-    power: 50,
     latitude: 51.5094,
     longitude: -0.1258,
-    address: "789 Pine Rd, Uptown"
+    address: "789 Pine Rd, Uptown",
+    connectors: [
+      {
+        id: 1031,
+        stationId: 103,
+        type: "Type 2",
+        power: 11,
+        status: "Out of Service"
+      }
+    ]
   },
   {
     id: 104,
     name: "Station D",
-    status: "Available",
     location: "Lot 4",
-    connectorType: "Type 2",
-    power: 11,
     latitude: 51.5104,
     longitude: -0.1248,
-    address: "321 Elm St, Westside"
+    address: "321 Elm St, Westside",
+    connectors: [
+      {
+        id: 1041,
+        stationId: 104,
+        type: "Type 2",
+        power: 11,
+        status: "Available"
+      },
+      {
+        id: 1042,
+        stationId: 104,
+        type: "CCS",
+        power: 50,
+        status: "Available"
+      }
+    ]
   },
   {
     id: 105,
     name: "Station E",
-    status: "Available",
     location: "Lot 5",
-    connectorType: "CCS",
-    power: 150,
     latitude: 51.5114,
     longitude: -0.1238,
-    address: "654 Maple Dr, Eastside"
+    address: "654 Maple Dr, Eastside",
+    connectors: [
+      {
+        id: 1051,
+        stationId: 105,
+        type: "CCS",
+        power: 150,
+        status: "Available"
+      }
+    ]
   }
 ];
 
@@ -159,6 +210,17 @@ export const updateChargerStatus = (id: number, status: 'Available' | 'Charging'
   const charger = chargers.find(c => c.id === id);
   if (charger) {
     charger.status = status;
+  }
+};
+
+// Helper function to update connector status
+export const updateConnectorStatus = (stationId: number, connectorId: number, status: 'Available' | 'Charging' | 'Out of Service'): void => {
+  const station = chargers.find(s => s.id === stationId);
+  if (station) {
+    const connector = station.connectors.find(c => c.id === connectorId);
+    if (connector) {
+      connector.status = status;
+    }
   }
 };
 

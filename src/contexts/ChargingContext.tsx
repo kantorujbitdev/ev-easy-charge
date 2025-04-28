@@ -1,9 +1,8 @@
 
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { ChargingContextType } from '@/lib/types';
-import { updateChargerStatus } from '@/lib/mockData';
-import { useToast } from '@/hooks/use-toast';
-import { toast } from '@/components/ui/sonner';
+import { updateConnectorStatus } from '@/lib/mockData';
+import { toast } from 'sonner';
 
 const ChargingContext = createContext<ChargingContextType>({
   startCharging: () => {},
@@ -45,7 +44,9 @@ export const ChargingProvider = ({ children }: { children: React.ReactNode }) =>
         }));
         
         if (newKwh >= currentSession.kwhLimit) {
-          stopCharging(currentSession.stationId!);
+          if (currentSession.stationId) {
+            stopCharging(currentSession.stationId);
+          }
           toast.info('Charging complete! Maximum kWh reached.');
         }
       }, 1000);
@@ -65,13 +66,13 @@ export const ChargingProvider = ({ children }: { children: React.ReactNode }) =>
       kWh: 0,
       kwhLimit,
     });
-    updateChargerStatus(stationId, 'Charging');
+    updateConnectorStatus(stationId, stationId, 'Charging');
     toast.success('Charging started successfully');
   }, []);
   
   const stopCharging = useCallback((stationId: number) => {
     setIsCharging(false);
-    updateChargerStatus(stationId, 'Available');
+    updateConnectorStatus(stationId, stationId, 'Available');
     toast.info('Charging stopped');
     
     setCurrentSession({
