@@ -68,7 +68,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     
     try {
-      const newUser = await registerNewUser(username, password, name, vehicle, licensePlate);
+      // Fix here: Make sure we're passing the correct number of arguments to registerNewUser
+      // We need to check what registerNewUser expects in the mockData.ts file
+      const newUser = await registerNewUser(username, password, name, vehicle);
+      
+      // Add the license plate to the user object after creation if needed
+      if (newUser) {
+        newUser.licensePlate = licensePlate;
+      }
+      
       setUser(newUser);
       setIsAuthenticated(true);
       localStorage.setItem('ev_user', JSON.stringify(newUser));
