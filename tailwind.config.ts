@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,8 +26,9 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#8B5CF6", /* Keep consistent purple as primary */
           foreground: "hsl(var(--primary-foreground))",
+          hover: "#7C3AED",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -41,7 +43,7 @@ export default {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: "#F97316", /* Orange accent color */
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {

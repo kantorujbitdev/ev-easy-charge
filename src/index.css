@@ -18,6 +18,11 @@
     @apply bg-red-100 text-red-800;
   }
 
+  /* Button styles to maintain consistent theming */
+  .btn-primary {
+    @apply bg-primary text-white;
+  }
+  
   /* QR scanner animation */
   .animate-scan {
     animation: scan 2s infinite;
@@ -34,4 +39,35 @@
       transform: translateY(0);
     }
   }
+}
+
+/* Global theme colors */
+:root {
+  --primary-color: #8B5CF6; /* Primary purple */
+  --primary-hover: #7C3AED; /* Darker purple for hover states */
+  --secondary-color: #E5E7EB; /* Light gray for secondary elements */
+  --accent-color: #F97316; /* Orange accent */
+}
+
+/* Apply theme colors to Tailwind's primary color */
+.bg-primary {
+  background-color: var(--primary-color);
+}
+.hover\:bg-primary-hover:hover {
+  background-color: var(--primary-hover);
+}
+.text-primary {
+  color: var(--primary-color);
+}
+
+/* Ensure button styling consistency */
+button.bg-primary, 
+.btn-primary,
+[class*="button"].bg-primary {
+  background-color: var(--primary-color);
+}
+button.bg-primary:hover, 
+.btn-primary:hover,
+[class*="button"].bg-primary:hover {
+  background-color: var(--primary-hover);
 }
