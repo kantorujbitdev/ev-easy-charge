@@ -20,7 +20,7 @@
 
   /* Button styles to maintain consistent theming */
   .btn-primary {
-    @apply bg-primary text-white;
+    @apply bg-primary text-white rounded-md shadow-sm hover:bg-primary-hover;
   }
   
   /* QR scanner animation */
@@ -39,14 +39,19 @@
       transform: translateY(0);
     }
   }
+
+  /* Card styling */
+  .card-style {
+    @apply bg-white border border-gray-200 rounded-lg shadow-md p-6;
+  }
 }
 
 /* Global theme colors */
 :root {
-  --primary-color: #8B5CF6; /* Primary purple */
-  --primary-hover: #7C3AED; /* Darker purple for hover states */
+  --primary-color: #1EAEDB; /* Bright blue */
+  --primary-hover: #0FA0CE; /* Darker blue for hover states */
   --secondary-color: #E5E7EB; /* Light gray for secondary elements */
-  --accent-color: #F97316; /* Orange accent */
+  --accent-color: #33C3F0; /* Sky blue accent */
 }
 
 /* Apply theme colors to Tailwind's primary color */
@@ -65,9 +70,26 @@ button.bg-primary,
 .btn-primary,
 [class*="button"].bg-primary {
   background-color: var(--primary-color);
+  @apply rounded-md shadow-sm;
 }
 button.bg-primary:hover, 
 .btn-primary:hover,
 [class*="button"].bg-primary:hover {
   background-color: var(--primary-hover);
+}
+
+/* Form styling */
+input, select, textarea {
+  @apply border border-gray-300 rounded-md p-2;
+}
+
+/* Card styling */
+.card {
+  @apply bg-white border border-gray-200 rounded-lg shadow-md p-6 mb-4;
+}
+
+/* Modal styling */
+[data-state="open"].AlertDialogContent,
+[data-state="open"].DialogContent {
+  @apply bg-white border border-gray-200 rounded-lg shadow-xl;
 }

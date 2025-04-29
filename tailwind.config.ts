@@ -26,24 +26,24 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#8B5CF6", /* Keep consistent purple as primary */
-          foreground: "hsl(var(--primary-foreground))",
-          hover: "#7C3AED",
+          DEFAULT: "#1EAEDB", /* Restore bright blue as primary */
+          foreground: "#ffffff",
+          hover: "#0FA0CE",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "#ea384c", /* Red for destructive actions */
+          foreground: "#ffffff",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#F97316", /* Orange accent color */
+          DEFAULT: "#33C3F0", /* Sky blue accent color */
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
