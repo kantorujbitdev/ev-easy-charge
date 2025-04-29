@@ -20,7 +20,7 @@
 
   /* Button styles to maintain consistent theming */
   .btn-primary {
-    @apply bg-primary text-white rounded-md shadow-sm hover:bg-primary-hover;
+    @apply bg-primary text-white rounded-xl shadow-sm hover:bg-primary-hover;
   }
   
   /* QR scanner animation */
@@ -42,7 +42,7 @@
 
   /* Card styling */
   .card-style {
-    @apply bg-white border border-gray-200 rounded-lg shadow-md p-6;
+    @apply bg-white border border-gray-200 rounded-xl shadow-md p-6;
   }
 }
 
@@ -70,7 +70,7 @@ button.bg-primary,
 .btn-primary,
 [class*="button"].bg-primary {
   background-color: var(--primary-color);
-  @apply rounded-md shadow-sm;
+  @apply rounded-xl shadow-sm;
 }
 button.bg-primary:hover, 
 .btn-primary:hover,
@@ -80,16 +80,16 @@ button.bg-primary:hover,
 
 /* Form styling */
 input, select, textarea {
-  @apply border border-gray-300 rounded-md p-2;
+  @apply border border-gray-300 rounded-xl p-2;
 }
 
 /* Card styling */
 .card {
-  @apply bg-white border border-gray-200 rounded-lg shadow-md p-6 mb-4;
+  @apply bg-white border border-gray-200 rounded-xl shadow-md p-6 mb-4;
 }
 
 /* Modal styling */
 [data-state="open"].AlertDialogContent,
 [data-state="open"].DialogContent {
-  @apply bg-white border border-gray-200 rounded-lg shadow-xl;
+  @apply bg-white border border-gray-200 rounded-xl shadow-xl;
 }
