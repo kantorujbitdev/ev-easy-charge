@@ -68,18 +68,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     
     try {
-      // Fix here: Make sure we're passing the correct number of arguments to registerNewUser
-      // We need to check what registerNewUser expects in the mockData.ts file
+      // Call registerNewUser with only the required parameters
       const newUser = await registerNewUser(username, password, name, vehicle);
       
-      // Add the license plate to the user object after creation if needed
-      if (newUser) {
-        newUser.licensePlate = licensePlate;
-      }
+      // Create a new user object with the license plate added
+      // This ensures TypeScript knows the shape of our object
+      const userWithLicensePlate: User = {
+        ...newUser,
+        licensePlate
+      };
       
-      setUser(newUser);
+      setUser(userWithLicensePlate);
       setIsAuthenticated(true);
-      localStorage.setItem('ev_user', JSON.stringify(newUser));
+      localStorage.setItem('ev_user', JSON.stringify(userWithLicensePlate));
       toast.success('Account created successfully');
       return true;
     } catch (error) {
