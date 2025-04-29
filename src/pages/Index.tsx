@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCharging } from "@/contexts/ChargingContext";
@@ -18,6 +18,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { fetchTopHeadlines } from "@/lib/news";
+import NewsList from "@/components/NewsList";
 
 const formatDuration = (milliseconds: number): string => {
   const seconds = Math.floor((milliseconds / 1000) % 60);
@@ -47,6 +49,20 @@ const AdBanner = ({
 );
 
 const Index = () => {
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    const getNews = async () => {
+      try {
+        const data = await fetchTopHeadlines();
+        setArticles(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getNews();
+  }, []);
+
   const { user } = useAuth();
   const { isCharging, currentSession } = useCharging();
   const navigate = useNavigate();
@@ -69,7 +85,10 @@ const Index = () => {
         <h1 className="text-3xl font-bold">Welcome, {user.name}!</h1>
         <p className="text-muted-foreground">{user.vehicle}</p>
       </section>
-
+      <main className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Top Headlines</h1>
+        <NewsList articles={articles} />
+      </main>
       {/* Advertising Banner */}
       <AdBanner
         title="Save 20% on Charging Costs"
