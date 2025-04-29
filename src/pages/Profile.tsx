@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { User, Mail, Phone, LogOut, Car } from "lucide-react";
+import { User, Mail, Phone, LogOut, Car, CreditCard } from "lucide-react";
 import { getUserSessions } from "@/lib/mockData";
 import {
   AlertDialog,
@@ -82,6 +83,12 @@ const Profile = () => {
             <Car className="h-4 w-4 text-muted-foreground mr-2" />
             <span className="text-muted-foreground w-24">Vehicle:</span>
             <span>{user.vehicle}</span>
+          </div>
+
+          <div className="flex items-center">
+            <CreditCard className="h-4 w-4 text-muted-foreground mr-2" />
+            <span className="text-muted-foreground w-24">License Plate:</span>
+            <span>{user.licensePlate || "Not specified"}</span>
           </div>
 
           {user.email && (
@@ -155,6 +162,6 @@ const Profile = () => {
       </Card>
     </div>
   );
-};
+}
 
 export default Profile;

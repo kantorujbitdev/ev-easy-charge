@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Zap, ArrowLeft } from "lucide-react";
+import { Zap, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +32,8 @@ const registerSchema = z
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
     name: z.string().min(2, "Name must be at least 2 characters"),
-    vehicle: z.string().optional(),
+    vehicle: z.string().min(2, "Vehicle must be at least 2 characters"),
+    licensePlate: z.string().min(2, "License plate must be at least 2 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -40,6 +42,8 @@ const registerSchema = z
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
@@ -51,6 +55,7 @@ export default function Register() {
       confirmPassword: "",
       name: "",
       vehicle: "",
+      licensePlate: "",
     },
   });
 
@@ -62,7 +67,8 @@ export default function Register() {
         values.username,
         values.password,
         values.name,
-        values.vehicle || ""
+        values.vehicle,
+        values.licensePlate
       );
       if (success) {
         navigate("/");
@@ -112,12 +118,26 @@ export default function Register() {
                   <FormItem>
                     <Label htmlFor="password">Password</Label>
                     <FormControl>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Enter password"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowPassword(!showPassword)}
+                          tabIndex={-1}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -131,12 +151,26 @@ export default function Register() {
                   <FormItem>
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
                     <FormControl>
-                      <Input
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="Confirm password"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          id="confirmPassword"
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          tabIndex={-1}
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="h-5 w-5" />
+                          ) : (
+                            <Eye className="h-5 w-5" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -166,11 +200,29 @@ export default function Register() {
                 name="vehicle"
                 render={({ field }) => (
                   <FormItem>
-                    <Label htmlFor="vehicle">Vehicle (Optional)</Label>
+                    <Label htmlFor="vehicle">Vehicle</Label>
                     <FormControl>
                       <Input
                         id="vehicle"
                         placeholder="Your EV model"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="licensePlate"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label htmlFor="licensePlate">License Plate Number</Label>
+                    <FormControl>
+                      <Input
+                        id="licensePlate"
+                        placeholder="Enter license plate number"
                         {...field}
                       />
                     </FormControl>

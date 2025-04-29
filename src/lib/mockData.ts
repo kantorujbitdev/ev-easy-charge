@@ -7,6 +7,7 @@ export const users: User[] = [
     password: "user1",
     name: "Alice Johnson",
     vehicle: "Nissan Leaf",
+    licensePlate: "EV-1234",
     email: "alice@example.com",
     phone: "555-123-4567",
     profileImage: "/placeholder.svg",
@@ -17,6 +18,7 @@ export const users: User[] = [
     password: "user2",
     name: "Bob Smith",
     vehicle: "Tesla Model 3",
+    licensePlate: "EV-5678",
     email: "bob@example.com",
     phone: "555-987-6543",
     profileImage: "/placeholder.svg",
@@ -27,6 +29,7 @@ export const users: User[] = [
     password: "admin",
     name: "ADMIN GORAL",
     vehicle: "BYD M6",
+    licensePlate: "ADMIN-EV",
     email: "admin@example.com",
     phone: "555-987-6543",
     profileImage: "/placeholder.svg",
@@ -298,7 +301,8 @@ export const registerNewUser = async (
   username: string,
   password: string,
   name: string,
-  vehicle: string
+  vehicle: string,
+  licensePlate: string
 ) => {
   // Generate a new user ID (would be handled by backend in real app)
   const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
@@ -309,6 +313,7 @@ export const registerNewUser = async (
     password,
     name,
     vehicle,
+    licensePlate,
   };
 
   users.push(newUser);
