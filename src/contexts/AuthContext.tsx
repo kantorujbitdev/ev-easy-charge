@@ -50,13 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
   
-  const register = async (
-    username: string, 
-    password: string, 
-    name: string, 
-    vehicle: string,
-    licensePlate: string
-  ): Promise<boolean> => {
+  const register = async (username: string, password: string, name: string, vehicle: string): Promise<boolean> => {
     // Simulate API call with 500ms delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
@@ -68,19 +62,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     
     try {
-      // Call registerNewUser with only the required parameters
       const newUser = await registerNewUser(username, password, name, vehicle);
-      
-      // Create a new user object with the license plate added
-      // This ensures TypeScript knows the shape of our object
-      const userWithLicensePlate: User = {
-        ...newUser,
-        licensePlate
-      };
-      
-      setUser(userWithLicensePlate);
+      setUser(newUser);
       setIsAuthenticated(true);
-      localStorage.setItem('ev_user', JSON.stringify(userWithLicensePlate));
+      localStorage.setItem('ev_user', JSON.stringify(newUser));
       toast.success('Account created successfully');
       return true;
     } catch (error) {
