@@ -1,9 +1,11 @@
+
 export type User = {
   id: number;
   username: string;
   password: string;
   name: string;
   vehicle: string;
+  licensePlate?: string;
   email?: string;
   phone?: string;
   profileImage?: string;
@@ -49,7 +51,8 @@ export type AuthContextType = {
     username: string,
     password: string,
     name: string,
-    vehicle: string
+    vehicle: string,
+    licensePlate?: string
   ) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;

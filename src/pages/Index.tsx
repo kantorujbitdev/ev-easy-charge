@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,13 +14,9 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { MapPin, Zap, Clock } from "lucide-react";
 import { chargers } from "@/lib/mockData";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { fetchTopHeadlines } from "@/lib/news";
 import NewsList from "@/components/NewsList";
+import { QrScanner } from "@/components/QrScanner";
 
 const formatDuration = (milliseconds: number): string => {
   const seconds = Math.floor((milliseconds / 1000) % 60);
@@ -74,48 +71,27 @@ const Index = () => {
     );
   }, 0);
 
-  if (!user) {
-    navigate("/login");
-    return null;
-  }
-
   return (
     <div className="space-y-6">
       <section className="text-center mb-8">
-        <h1 className="text-3xl font-bold">Welcome, {user.name}!</h1>
-        <p className="text-muted-foreground">{user.vehicle}</p>
+        <h1 className="text-3xl font-bold">Welcome, {user?.name || "User"}!</h1>
+        <p className="text-muted-foreground">{user?.vehicle || ""}</p>
       </section>
+      
       <main className="p-6">
         <h1 className="text-2xl font-bold mb-4">Top Headlines</h1>
         <NewsList articles={articles} />
       </main>
+      
+      {/* QR Scanner replaces "New Stations Added!" section */}
+      <QrScanner />
+
       {/* Advertising Banner */}
       <AdBanner
         title="Save 20% on Charging Costs"
         description="Subscribe to our Premium Plan and save on every charge"
         imageBg="bg-gradient-to-r from-blue-500 to-purple-600"
       />
-
-      <HoverCard>
-        <HoverCardTrigger asChild>
-          <div className="cursor-pointer">
-            <AdBanner
-              title="New Stations Added!"
-              description="Check out our newest charging locations"
-              imageBg="bg-gradient-to-r from-green-500 to-teal-500"
-            />
-          </div>
-        </HoverCardTrigger>
-        <HoverCardContent>
-          <div className="space-y-2">
-            <h4 className="font-medium">Expanded Network</h4>
-            <p className="text-sm text-muted-foreground">
-              We've added 15 new charging stations across the city. Find the one
-              closest to you!
-            </p>
-          </div>
-        </HoverCardContent>
-      </HoverCard>
 
       {isCharging ? (
         <Card className="border-primary shadow-md">

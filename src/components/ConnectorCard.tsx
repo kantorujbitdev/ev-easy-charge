@@ -1,5 +1,6 @@
-import React from "react";
-import { Battery, Zap } from "lucide-react";
+
+import React, { useState } from "react";
+import { Battery, Eye, EyeOff, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,8 @@ const formatDuration = (milliseconds: number): string => {
 export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
   const { isCharging, startCharging, stopCharging, currentSession } =
     useCharging();
+  const [showChargingForm, setShowChargingForm] = useState(false);
+  
   const form = useForm<z.infer<typeof chargingSchema>>({
     resolver: zodResolver(chargingSchema),
     defaultValues: {
@@ -51,17 +54,28 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
     currentSession.stationId === connector.stationId &&
     currentSession.connectorId === connector.id;
 
-  const handleChargingAction = () => {
-    if (isCurrentConnector) {
-      stopCharging(connector.stationId, connector.id);
-    } else if (connector.status === "Available") {
-      const kwhLimit = form.getValues("kwhLimit");
-      if (kwhLimit) {
-        startCharging(connector.stationId, connector.id, kwhLimit);
-      } else {
-        toast.error("Please enter a valid kWh limit");
-      }
+  const handleSelect = () => {
+    if (connector.status === "Available") {
+      setShowChargingForm(true);
     }
+  };
+
+  const handleStartCharging = () => {
+    const kwhLimit = form.getValues("kwhLimit");
+    if (kwhLimit) {
+      startCharging(connector.stationId, connector.id, kwhLimit);
+      setShowChargingForm(false);
+    } else {
+      toast.error("Please enter a valid kWh limit");
+    }
+  };
+
+  const handleCancelCharging = () => {
+    setShowChargingForm(false);
+  };
+
+  const handleStopCharging = () => {
+    stopCharging(connector.stationId, connector.id);
   };
 
   const getStatusBadge = (status: string) => {
@@ -134,51 +148,76 @@ export const ConnectorCard = ({ connector }: ConnectorCardProps) => {
                 className="h-2"
               />
             </div>
+
+            <Button
+              className="w-full bg-destructive hover:bg-destructive/90"
+              onClick={handleStopCharging}
+            >
+              Stop Charging
+            </Button>
           </div>
         )}
 
-        {!isCurrentConnector && connector.status === "Available" && (
-          <Form {...form}>
-            <form className="space-y-4">
-              <FormField
-                control={form.control}
-                name="kwhLimit"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label>kWh Limit</Label>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter kWh limit"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </form>
-          </Form>
+        {showChargingForm && connector.status === "Available" && !isCharging && (
+          <div className="space-y-4 p-4 bg-muted/30 rounded-lg border">
+            <Form {...form}>
+              <form className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="kwhLimit"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label>kWh Limit</Label>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Enter kWh limit"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    className="w-full"
+                    onClick={handleStartCharging}
+                  >
+                    Start Charging
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={handleCancelCharging}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
         )}
 
-        <Button
-          className={`w-full ${
-            isCurrentConnector ? "bg-destructive hover:bg-destructive/90" : ""
-          }`}
-          disabled={
-            connector.status === "Out of Service" ||
-            (isCharging && !isCurrentConnector)
-          }
-          onClick={handleChargingAction}
-        >
-          {isCurrentConnector
-            ? "Stop Charging"
-            : connector.status === "Available"
-            ? "Start Charging"
-            : connector.status === "Charging"
-            ? "In Use"
-            : "Out of Service"}
-        </Button>
+        {!isCurrentConnector && !showChargingForm && (
+          <Button
+            className="w-full"
+            disabled={
+              connector.status === "Out of Service" ||
+              (isCharging && !isCurrentConnector) ||
+              connector.status === "Charging"
+            }
+            onClick={handleSelect}
+          >
+            {connector.status === "Available"
+              ? "Select"
+              : connector.status === "Charging"
+              ? "In Use"
+              : "Out of Service"}
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

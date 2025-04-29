@@ -50,7 +50,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
   
-  const register = async (username: string, password: string, name: string, vehicle: string): Promise<boolean> => {
+  const register = async (
+    username: string, 
+    password: string, 
+    name: string, 
+    vehicle: string,
+    licensePlate: string
+  ): Promise<boolean> => {
     // Simulate API call with 500ms delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
@@ -62,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     
     try {
-      const newUser = await registerNewUser(username, password, name, vehicle);
+      const newUser = await registerNewUser(username, password, name, vehicle, licensePlate);
       setUser(newUser);
       setIsAuthenticated(true);
       localStorage.setItem('ev_user', JSON.stringify(newUser));
