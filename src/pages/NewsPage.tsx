@@ -10,28 +10,28 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-useEffect(() => {
-  console.log("Memuat data berita...");
+  useEffect(() => {
+    console.log("Memuat data berita...");
 
-  const getNews = async () => {
-    try {
-      const data = await fetchTopHeadlines();
-      setArticles(data);
-    } catch (err: any) {
-      console.error("Terjadi error:", err); // ← log ini bantu debug
-      setError("Gagal memuat berita.");
-    } finally {
-      console.log("Set loading = false");
-      setLoading(false);
-    }
-  };
-  console.log("NewsPage component is mounted");
-  getNews();
-}, []);
+    const getNews = async () => {
+      try {
+        const data = await fetchTopHeadlines();
+        setArticles(data);
+      } catch (err: any) {
+        console.error("Terjadi error:", err);
+        setError("Gagal memuat berita.");
+      } finally {
+        console.log("Set loading = false");
+        setLoading(false);
+      }
+    };
+    console.log("NewsPage component is mounted");
+    getNews();
+  }, []);
 
   return (
     <main>
-            <h1 className="text-2xl font-bold mb-4">Top Headlines</h1>
+      <h1 className="text-2xl font-bold mb-4">Top Headlines</h1>
       <NewsList articles={articles} />
 
       {loading && (
@@ -44,8 +44,6 @@ useEffect(() => {
           {error}
         </p>
       )}
-
     </main>
   );
 }
-

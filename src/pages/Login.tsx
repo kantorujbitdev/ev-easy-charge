@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,6 +35,27 @@ export default function Login() {
       setIsLoading(false);
     }
   };
+
+  async function kirimData() {
+    const response = await fetch("/api/kirim", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nama: "Andi",
+        usia: 25,
+        email: "andi@example.com",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Gagal mengirim data");
+    }
+
+    const data = await response.json();
+    console.log("Respon dari server:", data);
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -90,24 +110,23 @@ export default function Login() {
                 </button>
               </div>
             </div>
-            <div className="text-sm text-gray-500">
-              <p>Demo Accounts:</p>
-              <p>Username: user1 | Password: user1</p>
-              <p>Username: user2 | Password: user2</p>
-            </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Signing In..." : "Sign In"}
             </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => navigate("/register")}
-            >
-              Create Account
-            </Button>
+            <div className="text-center text-sm">
+              Dont have an account?{" "}
+              <Link to="/register" className="text-primary hover:underline">
+                Register
+              </Link>
+            </div>
+
+            {/* <div className="text-sm text-gray-500">
+              <p>Demo Accounts:</p>
+              <p>Username: user1 | Password: user1</p>
+              <p>Username: user2 | Password: user2</p>
+            </div> */}
           </CardFooter>
         </form>
       </Card>

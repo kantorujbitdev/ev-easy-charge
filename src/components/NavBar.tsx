@@ -1,6 +1,5 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, MapPin, Zap, User } from "lucide-react";
+import { Home, MapPin, Zap, User, PlugZap } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +14,7 @@ export function NavBar() {
   const navItems = [
     { name: "Home", path: "/", icon: Home },
     { name: "Chargers", path: "/chargers", icon: MapPin },
-    { name: "History", path: "/history", icon: Zap },
+    { name: "History", path: "/history", icon: PlugZap },
     { name: "Profile", path: "/profile", icon: User },
   ];
 
