@@ -1,0 +1,11 @@
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Any additional compiler options can be added here
+    // These will override options in the base tsconfig.json
+  },
+  "include": [
+    // Additional files to include
+  ]
+}
