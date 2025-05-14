@@ -1,6 +1,7 @@
+//src/pages/Login.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { goLogin } from "@/lib/api_user";
+// import { goLogin } from "@/lib/api_user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,8 +21,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { user, setUser } = useAuth();
+  // const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const { user, login } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -36,23 +38,25 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const result = await goLogin(username, password);
-      console.log("Hasil response dari API:", result);
+      // const result = await goLogin(username, password);
+      // console.log("Hasil response dari API:", result);
 
-      if (result.token != null) {
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-        setUser(user); // Simpan ke state
+      // if (result.token != null) {
+      //   localStorage.setItem("token", result.token);
+      //   localStorage.setItem("user", JSON.stringify(result.user));
+      //   setUser(user); // Simpan ke state
 
-        setUser({ ...result.user, token: result.token });
-        navigate("/");
-        console.log("GO TO HOME");
+      //   setUser({ ...result.user, token: result.token });
+      //   navigate("/");
+      //   console.log("GO TO HOME");
 
-        // setUser(result); // Simpan data user dari server ke context
-        // navigate("/");
-      } else {
-        alert("Login gagal: Data tidak valid");
-      }
+      //   // setUser(result); // Simpan data user dari server ke context
+      //   // navigate("/");
+      // } else {
+      //   alert("Login gagal: Data tidak valid");
+      // }
+
+      await login(username, password);
     } catch (error) {
       alert("Login gagal: " + (error as Error).message);
     } finally {

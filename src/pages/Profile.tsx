@@ -1,3 +1,4 @@
+//src/pages/Profile.tsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/api/AuthContext";
-import { goLogout } from "@/lib/api_user";
+// import { goLogout } from "@/lib/api_user";
 
 const Profile = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -60,11 +61,13 @@ const Profile = () => {
   const handleConfirmedLogout = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("TOKEN: " + user.token);
     try {
-      const result = await goLogout(user.username);
-      if (result) {
-        logout();
-      }
+      // const result = await goLogout(user.username, user.token);
+      // if (result) {
+      //   logout();
+      // }
+      logout();
     } catch (error) {
       alert("Logout gagal: " + (error as Error).message);
     } finally {
@@ -76,7 +79,7 @@ const Profile = () => {
     <div className="space-y-6">
       <div className="flex flex-col items-center">
         <Avatar className="h-24 w-24 mb-4">
-          {/* <AvatarImage src={user.profileImage} alt={user.name} />
+          {/* <AvatarImage src={user.profile_image} alt={user.name} />
           <AvatarFallback className="text-2xl">
             {getInitials(user.name)}
           </AvatarFallback> */}
@@ -105,7 +108,7 @@ const Profile = () => {
           <div className="flex items-center">
             <CreditCard className="h-4 w-4 text-muted-foreground mr-2" />
             <span className="text-muted-foreground w-24">License Plate:</span>
-            <span>{user.licensePlate || "Not specified"}</span>
+            <span>{user.license_plate || "Not specified"}</span>
           </div>
 
           {user.email && (
@@ -169,8 +172,11 @@ const Profile = () => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleConfirmedLogout}>
-                  Logout
+                <AlertDialogAction
+                  onClick={handleConfirmedLogout}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Logging out..." : "Logout"}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

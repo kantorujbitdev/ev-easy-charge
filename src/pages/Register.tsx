@@ -32,7 +32,7 @@ const registerSchema = z
     confirmPassword: z.string(),
     name: z.string().min(2, "Name must be at least 2 characters"),
     vehicle: z.string().min(2, "Vehicle must be at least 2 characters"),
-    licensePlate: z
+    license_plate: z
       .string()
       .min(2, "License plate must be at least 2 characters"),
   })
@@ -47,6 +47,7 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -56,7 +57,7 @@ export default function Register() {
       confirmPassword: "",
       name: "",
       vehicle: "",
-      licensePlate: "",
+      license_plate: "",
     },
   });
 
@@ -69,10 +70,20 @@ export default function Register() {
         values.password,
         values.name,
         values.vehicle,
-        values.licensePlate
+        values.license_plate,
+        "",
+        "",
+        ""
       );
       if (success) {
-        navigate("/");
+        // navigate("/");
+        try {
+          await login(values.username, values.password);
+        } catch (error) {
+          alert("Login gagal: " + (error as Error).message);
+        } finally {
+          setIsLoading(false);
+        }
       }
     } finally {
       setIsLoading(false);
@@ -218,13 +229,13 @@ export default function Register() {
 
               <FormField
                 control={form.control}
-                name="licensePlate"
+                name="license_plate"
                 render={({ field }) => (
                   <FormItem>
-                    <Label htmlFor="licensePlate">License Plate Number</Label>
+                    <Label htmlFor="license_plate">License Plate Number</Label>
                     <FormControl>
                       <Input
-                        id="licensePlate"
+                        id="license_plate"
                         placeholder="Enter license plate number"
                         {...field}
                       />
