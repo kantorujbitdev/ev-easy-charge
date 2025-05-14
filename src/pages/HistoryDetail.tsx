@@ -11,9 +11,9 @@ import {
   Battery,
   CreditCard,
 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ChargingSession } from "@/lib/types";
 import { getSessionById } from "@/lib/mockData";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 const HistoryDetail = () => {
   const { id } = useParams<{ id: string }>();

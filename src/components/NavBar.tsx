@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, MapPin, Zap, User, PlugZap } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 export function NavBar() {
   const location = useLocation();

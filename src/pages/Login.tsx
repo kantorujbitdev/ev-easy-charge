@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { goLogin } from "@/lib/api_user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,49 +13,52 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Zap, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+    // localStorage.removeItem("token");
+    // setUser(null);
+    // navigate("/login");
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const success = await login(username, password);
-      if (success) {
+      const result = await goLogin(username, password);
+      console.log("Hasil response dari API:", result);
+
+      if (result.token != null) {
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.user));
+        setUser(user); // Simpan ke state
+
+        setUser({ ...result.user, token: result.token });
         navigate("/");
+        console.log("GO TO HOME");
+
+        // setUser(result); // Simpan data user dari server ke context
+        // navigate("/");
+      } else {
+        alert("Login gagal: Data tidak valid");
       }
+    } catch (error) {
+      alert("Login gagal: " + (error as Error).message);
     } finally {
       setIsLoading(false);
     }
   };
-
-  async function kirimData() {
-    const response = await fetch("/api/kirim", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nama: "Andi",
-        usia: 25,
-        email: "andi@example.com",
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Gagal mengirim data");
-    }
-
-    const data = await response.json();
-    console.log("Respon dari server:", data);
-  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

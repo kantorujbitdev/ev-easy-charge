@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Zap, Clock, ChevronRight } from "lucide-react";
 import { getUserSessions } from "@/lib/mockData";
 import { ChargingSession } from "@/lib/types";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 const History = () => {
   const { user, isAuthenticated } = useAuth();

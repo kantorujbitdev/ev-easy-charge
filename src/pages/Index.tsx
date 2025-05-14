@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { useCharging } from "@/contexts/ChargingContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +17,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import NewsPage from "./NewsPage";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 const formatDuration = (milliseconds: number): string => {
   const seconds = Math.floor((milliseconds / 1000) % 60);
@@ -50,6 +50,7 @@ const Index = () => {
   const { user } = useAuth();
   const { isCharging, currentSession } = useCharging();
   const navigate = useNavigate();
+  console.log("user: " + user);
 
   // Count available connectors across all stations
   const availableChargers = chargers.reduce((count, station) => {
@@ -69,7 +70,7 @@ const Index = () => {
         <h1 className="text-3xl font-bold">Welcome, {user.name}!</h1>
         <p className="text-muted-foreground">{user.vehicle}</p>
       </section>
-        
+
       <NewsPage />
 
       {/* Advertising Banner */}

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { NavBar } from "./NavBar";
-import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();

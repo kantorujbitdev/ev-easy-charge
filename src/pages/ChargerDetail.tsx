@@ -5,8 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getChargerById } from "@/lib/mockData";
 import { ChargerStation } from "@/lib/types";
-import { useAuth } from "@/contexts/AuthContext";
 import { ConnectorCard } from "@/components/ConnectorCard";
+import { useAuth } from "@/contexts/api/AuthContext";
 
 const ChargerDetail = () => {
   const { id } = useParams<{ id: string }>();

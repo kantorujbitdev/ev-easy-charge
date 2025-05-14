@@ -3,7 +3,6 @@ import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { ChargingProvider } from "@/contexts/ChargingContext";
 import { Layout } from "@/components/Layout";
 
@@ -17,6 +16,7 @@ import History from "./pages/History";
 import HistoryDetail from "./pages/HistoryDetail";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import { AuthProvider } from "./contexts/api/AuthContext";
 
 // Create a query client
 const queryClient = new QueryClient();
@@ -24,11 +24,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider>
-        <ChargingProvider>
-          <Toaster />
-          <SonnerToaster />
-          <BrowserRouter>
+      <ChargingProvider>
+        <Toaster />
+        <SonnerToaster />
+        <BrowserRouter>
+          <AuthProvider>
             <Layout>
               <Routes>
                 <Route path="/login" element={<Login />} />
@@ -43,9 +43,9 @@ const App = () => (
                 <Route path="*" element={<Navigate to="/404" />} />
               </Routes>
             </Layout>
-          </BrowserRouter>
-        </ChargingProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </ChargingProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

@@ -1,6 +1,4 @@
-
-import React from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,14 +23,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/contexts/api/AuthContext";
+import { goLogout } from "@/lib/api_user";
 
 const Profile = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Gunakan useEffect untuk memeriksa login status dan redirect
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, user, navigate]); // pastikan dependensi ada
 
   if (!isAuthenticated || !user) {
-    navigate("/login");
-    return null;
+    return null; // jangan render halaman jika user belum login
   }
 
   const userSessions = getUserSessions(user.id);
@@ -50,19 +57,29 @@ const Profile = () => {
       .toUpperCase();
   };
 
-  const handleConfirmedLogout = () => {
-    logout();
-    navigate("/login");
+  const handleConfirmedLogout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const result = await goLogout(user.username);
+      if (result) {
+        logout();
+      }
+    } catch (error) {
+      alert("Logout gagal: " + (error as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center">
         <Avatar className="h-24 w-24 mb-4">
-          <AvatarImage src={user.profileImage} alt={user.name} />
+          {/* <AvatarImage src={user.profileImage} alt={user.name} />
           <AvatarFallback className="text-2xl">
             {getInitials(user.name)}
-          </AvatarFallback>
+          </AvatarFallback> */}
         </Avatar>
         <h1 className="text-2xl font-bold">{user.name}</h1>
         <p className="text-muted-foreground">{user.username}</p>
@@ -162,6 +179,6 @@ const Profile = () => {
       </Card>
     </div>
   );
-}
+};
 
 export default Profile;
